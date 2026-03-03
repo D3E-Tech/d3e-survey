@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Liberia Higher Education Digital Readiness Survey 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Poppins', sans-serif; background: #0a0c18; color: #e0e8f5; min-height: 100vh; }
+
+.survey-header {
+  background: linear-gradient(135deg, #0e3d7a, #12162a);
+  padding: 40px 24px;
+  text-align: center;
+  border-bottom: 3px solid #3a9bff;
+}
+.survey-header img { height: 48px; margin-bottom: 16px; }
+.survey-header h1 { font-size: 1.6rem; font-weight: 700; color: #fff; margin-bottom: 8px; }
+.survey-header p { font-size: 0.9rem; color: #8a9cc0; max-width: 600px; margin: 0 auto; line-height: 1.6; }
+
+.surveyor-script {
+  margin: 24px auto 0; max-width: 600px; background: rgba(58,155,255,0.06);
+  border: 1px solid rgba(58,155,255,0.15); border-radius: 10px; padding: 20px 24px;
+  text-align: left;
+}
+.surveyor-script .script-label {
+  font-size: 0.65rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+  color: #3a9bff; margin-bottom: 10px;
+}
+.surveyor-script p {
+  font-size: 0.82rem; color: #c0cce0; line-height: 1.7; font-style: italic; margin: 0;
+}
+
+.survey-container { max-width: 720px; margin: 0 auto; padding: 32px 24px 60px; }
+
+.progress-bar { background: #12162a; border-radius: 8px; height: 8px; margin-bottom: 32px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, #5eb8ff, #3a9bff, #1a6ddc); border-radius: 8px; transition: width 0.5s ease; }
+
+.section { margin-bottom: 40px; }
+.section-label {
+  font-size: 0.7rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+  color: #3a9bff; margin-bottom: 8px;
+}
+.section-title { font-size: 1.2rem; font-weight: 600; color: #fff; margin-bottom: 20px; }
+
+.question {
+  background: #12162a; border: 1px solid rgba(58,155,255,0.08); border-radius: 12px;
+  padding: 24px; margin-bottom: 16px; transition: border-color 0.3s;
+}
+.question:focus-within { border-color: rgba(58,155,255,0.3); }
+.question label {
+  display: block; font-size: 0.9rem; font-weight: 500; color: #e0e8f5; margin-bottom: 4px;
+}
+.required { color: #3a9bff; }
+.question .hint { font-size: 0.75rem; color: #8a9cc0; margin-bottom: 12px; }
+
+input[type="text"], input[type="email"], input[type="tel"], input[type="number"], select, textarea {
+  width: 100%; background: #0a0c18; border: 1px solid rgba(58,155,255,0.12);
+  border-radius: 8px; padding: 12px 14px; color: #e0e8f5; font-family: 'Poppins', sans-serif;
+  font-size: 0.85rem; font-weight: 300; outline: none; transition: border-color 0.3s;
+}
+input:focus, select:focus, textarea:focus { border-color: #3a9bff; }
+textarea { resize: vertical; min-height: 80px; }
+select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%238a9cc0'%3E%3Cpath d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; }
+select option { background: #12162a; color: #e0e8f5; }
+
+.radio-group, .checkbox-group { display: flex; flex-direction: column; gap: 8px; }
+.radio-option, .checkbox-option {
+  display: flex; align-items: center; gap: 10px; padding: 10px 14px;
+  background: #0a0c18; border: 1px solid rgba(58,155,255,0.08); border-radius: 8px;
+  cursor: pointer; transition: all 0.2s;
+}
+.radio-option:hover, .checkbox-option:hover { border-color: rgba(58,155,255,0.25); background: rgba(58,155,255,0.04); }
+.radio-option input, .checkbox-option input { accent-color: #3a9bff; width: 16px; height: 16px; cursor: pointer; margin-right: 4px; flex-shrink: 0; }
+.radio-option span, .checkbox-option span { font-size: 0.85rem; color: #e0e8f5; font-weight: 300; }
+
+.scale-group { display: flex; gap: 8px; flex-wrap: wrap; }
+.scale-option {
+  flex: 1; min-width: 48px; text-align: center; padding: 10px 4px;
+  background: #0a0c18; border: 1px solid rgba(58,155,255,0.08); border-radius: 8px;
+  cursor: pointer; transition: all 0.2s;
+}
+.scale-option:hover { border-color: rgba(58,155,255,0.25); }
+.scale-option.selected { background: rgba(58,155,255,0.15); border-color: #3a9bff; }
+.scale-option input { display: none; }
+.scale-option span { font-size: 0.85rem; color: #e0e8f5; }
+.scale-labels { display: flex; justify-content: space-between; margin-top: 6px; }
+.scale-labels span { font-size: 0.7rem; color: #8a9cc0; }
+
+.grid-table { width: 100%; border-collapse: collapse; }
+.grid-table th { font-size: 0.7rem; font-weight: 500; color: #8a9cc0; padding: 8px 4px; text-align: center; }
+.grid-table td { padding: 10px 4px; text-align: center; border-top: 1px solid rgba(58,155,255,0.06); }
+.grid-table td:first-child { text-align: left; font-size: 0.8rem; color: #e0e8f5; padding-right: 12px; }
+.grid-table input[type="radio"] { accent-color: #3a9bff; width: 16px; height: 16px; cursor: pointer; }
+
+.nav-buttons { display: flex; justify-content: space-between; gap: 16px; margin-top: 32px; }
+.btn {
+  padding: 14px 32px; border-radius: 10px; font-family: 'Poppins', sans-serif;
+  font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: all 0.3s; border: none;
+}
+.btn-next {
+  background: linear-gradient(135deg, #3a9bff, #1a6ddc); color: #fff; margin-left: auto;
+}
+.btn-next:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(58,155,255,0.3); }
+.btn-back { background: transparent; color: #8a9cc0; border: 1px solid rgba(58,155,255,0.15); }
+.btn-back:hover { border-color: #3a9bff; color: #e0e8f5; }
+.btn-submit { background: linear-gradient(135deg, #22c55e, #16a34a); color: #fff; }
+.btn-submit:hover { box-shadow: 0 6px 24px rgba(34,197,94,0.3); }
+
+.page { display: none; }
+.page.active { display: block; }
+
+.thank-you { text-align: center; padding: 80px 24px; }
+.thank-you h2 { font-size: 1.8rem; color: #fff; margin-bottom: 12px; }
+.thank-you p { color: #8a9cc0; font-size: 0.95rem; }
+.check-icon { font-size: 3rem; margin-bottom: 20px; display: block; color: #22c55e; }
+
+.other-input { margin-top: 8px; display: none; }
+.other-input.show { display: block; }
+
+@media (max-width: 600px) {
+  .survey-header h1 { font-size: 1.3rem; }
+  .scale-group { gap: 4px; }
+  .scale-option { min-width: 36px; padding: 8px 2px; }
+  .grid-table th { font-size: 0.6rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="survey-header">
+  <h1>Liberia Higher Education Digital Readiness Survey 2026</h1>
+  <p>End-to-End Integrated Entrance Registration Platform — Assessing institutional needs, technology readiness, and interest among Liberian universities.</p>
+  <div class="surveyor-script">
+    <div class="script-label">Surveyor Script</div>
+    <p>"Good day. My name is __________ and I am conducting this survey on behalf of D3E Technology Solutions. As of early 2026, the Liberian government and the African Union (AU-IPED) have officially launched the EMIS Modernization Roadmap, which mandates that all higher education institutions move toward a Unified Data System. We are gathering information to understand your institution's current registration processes, technology readiness, and interest in a digital entrance registration platform that aligns with this national initiative. Your responses will help shape a solution tailored to the needs of Liberian universities. This survey takes approximately 10–15 minutes. All responses are confidential."</p>
+  </div>
+</div>
+
+<div class="survey-container">
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width: 20%"></div></div>
+
+  <!-- PAGE 1: Institution Profile -->
+  <div class="page active" id="page1">
+    <div class="section">
+      <div class="section-label">Section 1 of 5</div>
+      <div class="section-title">Institution Profile</div>
+
+      <div class="question">
+        <label>Name of Institution <span class="required">*</span></label>
+        <div class="hint">Official name of your university or college</div>
+        <input type="text" name="institution" required placeholder="e.g., University of Liberia">
+      </div>
+
+      <div class="question">
+        <label>Name <span class="required">*</span></label>
+        <input type="text" name="respondent_name" required placeholder="Full name">
+      </div>
+
+      <div class="question">
+        <label>Role / Title <span class="required">*</span></label>
+        <input type="text" name="role" required placeholder="e.g., Registrar, IT Director, Dean of Admissions">
+      </div>
+
+      <div class="question">
+        <label>Email Address <span class="required">*</span></label>
+        <input type="email" name="email" required placeholder="your@email.com">
+      </div>
+
+      <div class="question">
+        <label>Phone Number</label>
+        <input type="tel" name="phone" placeholder="+231 XXX XXX XXXX">
+      </div>
+
+      <div class="question">
+        <label>Institution Type <span class="required">*</span></label>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="inst_type" value="Public University" required><span>Public University</span></label>
+          <label class="radio-option"><input type="radio" name="inst_type" value="Private University"><span>Private University</span></label>
+          <label class="radio-option"><input type="radio" name="inst_type" value="Community College"><span>Community College</span></label>
+          <label class="radio-option"><input type="radio" name="inst_type" value="Polytechnic"><span>Polytechnic / Technical Institute</span></label>
+          <label class="radio-option"><input type="radio" name="inst_type" value="Other"><span>Other</span></label>
+        </div>
+        <input type="text" class="other-input" placeholder="Please specify..." data-for="inst_type">
+      </div>
+
+      <div class="question">
+        <label>Location (County) <span class="required">*</span></label>
+        <select name="county" required>
+          <option value="" disabled selected>Select county...</option>
+          <option>Montserrado</option><option>Bong</option><option>Nimba</option>
+          <option>Grand Bassa</option><option>Lofa</option><option>Margibi</option>
+          <option>Grand Cape Mount</option><option>Maryland</option><option>Sinoe</option>
+          <option>Grand Gedeh</option><option>Bomi</option><option>Gbarpolu</option>
+          <option>River Cess</option><option>River Gee</option><option>Grand Kru</option>
+        </select>
+      </div>
+
+      <div class="question">
+        <label>Approximate Annual Student Enrollment <span class="required">*</span></label>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="enrollment" value="Under 500" required><span>Under 500</span></label>
+          <label class="radio-option"><input type="radio" name="enrollment" value="500-1,000"><span>500 – 1,000</span></label>
+          <label class="radio-option"><input type="radio" name="enrollment" value="1,000-3,000"><span>1,000 – 3,000</span></label>
+          <label class="radio-option"><input type="radio" name="enrollment" value="3,000-5,000"><span>3,000 – 5,000</span></label>
+          <label class="radio-option"><input type="radio" name="enrollment" value="5,000-10,000"><span>5,000 – 10,000</span></label>
+          <label class="radio-option"><input type="radio" name="enrollment" value="Over 10,000"><span>Over 10,000</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label>Number of Academic Programs / Departments</label>
+        <input type="number" name="programs" placeholder="e.g., 25" min="1">
+      </div>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn btn-next" onclick="showPage(2)">Next</button>
+    </div>
+  </div>
+
+  <!-- PAGE 2: Current Registration Process -->
+  <div class="page" id="page2">
+    <div class="section">
+      <div class="section-label">Section 2 of 5</div>
+      <div class="section-title">Current Registration Process</div>
+
+      <div class="question">
+        <label>How does your institution currently handle entrance registration? <span class="required">*</span></label>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="current_process" value="Fully manual (paper-based)" required><span>Fully manual (paper-based)</span></label>
+          <label class="radio-option"><input type="radio" name="current_process" value="Partially digital (some forms online, some paper)"><span>Partially digital (some online, some paper)</span></label>
+          <label class="radio-option"><input type="radio" name="current_process" value="Mostly digital with a custom system"><span>Mostly digital with a custom-built system</span></label>
+          <label class="radio-option"><input type="radio" name="current_process" value="Fully digital with a commercial platform"><span>Fully digital with a commercial platform</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label>How long does the typical entrance registration cycle take?</label>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="reg_duration" value="Less than 1 week"><span>Less than 1 week</span></label>
+          <label class="radio-option"><input type="radio" name="reg_duration" value="1-2 weeks"><span>1 – 2 weeks</span></label>
+          <label class="radio-option"><input type="radio" name="reg_duration" value="2-4 weeks"><span>2 – 4 weeks</span></label>
+          <label class="radio-option"><input type="radio" name="reg_duration" value="1-2 months"><span>1 – 2 months</span></label>
+          <label class="radio-option"><input type="radio" name="reg_duration" value="Over 2 months"><span>Over 2 months</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label>What are the biggest pain points in your current process? <span class="required">*</span></label>
+        <div class="hint">Select all that apply</div>
+        <div class="checkbox-group">
+          <label class="checkbox-option"><input type="checkbox" name="pain_points" value="Lost or misplaced documents"><span>Lost or misplaced documents</span></label>
+          <label class="checkbox-option"><input type="checkbox" name="pain_points" value="Long queues and wait times"><span>Long queues and wait times for students</span></label>
+          <label class="checkbox-option"><input type="checkbox" name="pain_points" value="Manual data entry errors"><span>Manual data entry errors</span></label>
+          <label class="checkbox-option"><input type="checkbox" name="pain_points" value="Difficulty tracking application status"><span>Difficulty tracking application status</span></label>
+          <label class="checkbox-option"><input type="checkbox" name="pain_points" value="Payment collection and reconciliation"><span>Payment collection and reconciliation</span></label>
+          <label class="checkbox-option"><input type="checkbox" name="pain_points" value="No centralized student database"><span>No centralized student database</span></label>
+          <label class="checkbox-option"><input type="checkbox" name="pain_points" value="Difficulty generating reports"><span>Difficulty generating reports and statistics</span></label>
+          <label class="checkbox-option"><input type="checkbox" name="pain_points" value="Communication with applicants"><span>Poor communication with applicants</span></label>
+          <label class="checkbox-option"><input type="checkbox" name="pain_points" value="Entrance exam management"><span>Entrance exam scheduling and management</span></label>
+          <label class="checkbox-option"><input type="checkbox" name="pain_points" value="Credential verification"><span>Credential / transcript verification</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label>How many staff are involved in the registration process?</label>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="staff_count" value="1-3"><span>1 – 3</span></label>
+          <label class="radio-option"><input type="radio" name="staff_count" value="4-10"><span>4 – 10</span></label>
+          <label class="radio-option"><input type="radio" name="staff_count" value="11-20"><span>11 – 20</span></label>
+          <label class="radio-option"><input type="radio" name="staff_count" value="Over 20"><span>Over 20</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label>Does your institution currently use any Student Information System (SIS)?</label>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="has_sis" value="Yes"><span>Yes</span></label>
+          <label class="radio-option"><input type="radio" name="has_sis" value="No"><span>No</span></label>
+          <label class="radio-option"><input type="radio" name="has_sis" value="Planning to implement"><span>No, but planning to implement one</span></label>
+        </div>
+        <input type="text" class="other-input" placeholder="If yes, which system?" data-for="has_sis">
+      </div>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn btn-back" onclick="showPage(1)">Back</button>
+      <button class="btn btn-next" onclick="showPage(3)">Next</button>
+    </div>
+  </div>
+
+  <!-- PAGE 3: Technology Readiness -->
+  <div class="page" id="page3">
+    <div class="section">
+      <div class="section-label">Section 3 of 5</div>
+      <div class="section-title">Technology & Infrastructure Readiness</div>
+
+      <div class="question">
+        <label>Does your institution have reliable internet access? <span class="required">*</span></label>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="internet" value="Yes, reliable broadband" required><span>Yes, reliable broadband</span></label>
+          <label class="radio-option"><input type="radio" name="internet" value="Yes, but intermittent"><span>Yes, but intermittent / unreliable</span></label>
+          <label class="radio-option"><input type="radio" name="internet" value="Limited - mobile data only"><span>Limited — mostly mobile data</span></label>
+          <label class="radio-option"><input type="radio" name="internet" value="Very limited or none"><span>Very limited or no internet</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label>What devices are available to administrative staff? <span class="required">*</span></label>
+        <div class="hint">Select all that apply</div>
+        <div class="checkbox-group">
+          <label class="checkbox-option"><input type="checkbox" name="devices" value="Desktop computers"><span>Desktop computers</span></label>
+          <label class="checkbox-option"><input type="checkbox" name="devices" value="Laptops"><span>Laptops</span></label>
+          <label class="checkbox-option"><input type="checkbox" name="devices" value="Tablets"><span>Tablets</span></label>
+          <label class="checkbox-option"><input type="checkbox" name="devices" value="Smartphones"><span>Smartphones</span></label>
+          <label class="checkbox-option"><input type="checkbox" name="devices" value="Shared computers"><span>Shared / lab computers only</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label>Does your institution have dedicated IT staff?</label>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="it_staff" value="Yes, dedicated IT department"><span>Yes, dedicated IT department</span></label>
+          <label class="radio-option"><input type="radio" name="it_staff" value="Yes, 1-2 IT personnel"><span>Yes, 1–2 IT personnel</span></label>
+          <label class="radio-option"><input type="radio" name="it_staff" value="No dedicated IT staff"><span>No dedicated IT staff</span></label>
+          <label class="radio-option"><input type="radio" name="it_staff" value="Outsourced IT support"><span>We outsource IT support</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label>How important is offline capability for your institution?</label>
+        <div class="hint">Ability to use the platform without internet and sync later</div>
+        <div class="scale-group" data-name="offline_importance">
+          <label class="scale-option"><input type="radio" name="offline_importance" value="1"><span>1</span></label>
+          <label class="scale-option"><input type="radio" name="offline_importance" value="2"><span>2</span></label>
+          <label class="scale-option"><input type="radio" name="offline_importance" value="3"><span>3</span></label>
+          <label class="scale-option"><input type="radio" name="offline_importance" value="4"><span>4</span></label>
+          <label class="scale-option"><input type="radio" name="offline_importance" value="5"><span>5</span></label>
+        </div>
+        <div class="scale-labels"><span>Not important</span><span>Critical</span></div>
+      </div>
+
+      <div class="question">
+        <label>Does your institution currently accept digital payments from students?</label>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="digital_payments" value="Yes - mobile money"><span>Yes — mobile money (MTN MoMo, Orange Money)</span></label>
+          <label class="radio-option"><input type="radio" name="digital_payments" value="Yes - bank transfer"><span>Yes — bank transfer</span></label>
+          <label class="radio-option"><input type="radio" name="digital_payments" value="Yes - multiple methods"><span>Yes — multiple methods</span></label>
+          <label class="radio-option"><input type="radio" name="digital_payments" value="No - cash only"><span>No — cash payments only</span></label>
+          <label class="radio-option"><input type="radio" name="digital_payments" value="Planning to"><span>Not yet, but planning to</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label>What is the primary power source at your institution?</label>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="power" value="Grid electricity (reliable)"><span>Grid electricity (reliable)</span></label>
+          <label class="radio-option"><input type="radio" name="power" value="Grid electricity (frequent outages)"><span>Grid electricity (frequent outages)</span></label>
+          <label class="radio-option"><input type="radio" name="power" value="Generator primary"><span>Generator (primary source)</span></label>
+          <label class="radio-option"><input type="radio" name="power" value="Solar"><span>Solar power</span></label>
+          <label class="radio-option"><input type="radio" name="power" value="Mixed"><span>Mixed (grid + generator backup)</span></label>
+        </div>
+      </div>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn btn-back" onclick="showPage(2)">Back</button>
+      <button class="btn btn-next" onclick="showPage(4)">Next</button>
+    </div>
+  </div>
+
+  <!-- PAGE 4: Platform Interest & Features -->
+  <div class="page" id="page4">
+    <div class="section">
+      <div class="section-label">Section 4 of 5</div>
+      <div class="section-title">Platform Interest & Feature Priorities</div>
+
+      <div class="question">
+        <label>How interested is your institution in adopting a digital entrance registration platform? <span class="required">*</span></label>
+        <div class="scale-group" data-name="interest_level">
+          <label class="scale-option"><input type="radio" name="interest_level" value="1" required><span>1</span></label>
+          <label class="scale-option"><input type="radio" name="interest_level" value="2"><span>2</span></label>
+          <label class="scale-option"><input type="radio" name="interest_level" value="3"><span>3</span></label>
+          <label class="scale-option"><input type="radio" name="interest_level" value="4"><span>4</span></label>
+          <label class="scale-option"><input type="radio" name="interest_level" value="5"><span>5</span></label>
+        </div>
+        <div class="scale-labels"><span>Not interested</span><span>Very interested</span></div>
+      </div>
+
+      <div class="question">
+        <label>Rate the importance of each feature for your institution: <span class="required">*</span></label>
+        <div class="hint">1 = Not important, 5 = Critical</div>
+        <div style="overflow-x: auto;">
+        <table class="grid-table">
+          <thead>
+            <tr><th style="text-align:left; min-width:180px;">Feature</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Online application submission</td><td><input type="radio" name="feat_online_app" value="1"></td><td><input type="radio" name="feat_online_app" value="2"></td><td><input type="radio" name="feat_online_app" value="3"></td><td><input type="radio" name="feat_online_app" value="4"></td><td><input type="radio" name="feat_online_app" value="5"></td></tr>
+            <tr><td>Entrance exam scheduling</td><td><input type="radio" name="feat_exam" value="1"></td><td><input type="radio" name="feat_exam" value="2"></td><td><input type="radio" name="feat_exam" value="3"></td><td><input type="radio" name="feat_exam" value="4"></td><td><input type="radio" name="feat_exam" value="5"></td></tr>
+            <tr><td>Digital payment processing</td><td><input type="radio" name="feat_payment" value="1"></td><td><input type="radio" name="feat_payment" value="2"></td><td><input type="radio" name="feat_payment" value="3"></td><td><input type="radio" name="feat_payment" value="4"></td><td><input type="radio" name="feat_payment" value="5"></td></tr>
+            <tr><td>Document / credential upload</td><td><input type="radio" name="feat_docs" value="1"></td><td><input type="radio" name="feat_docs" value="2"></td><td><input type="radio" name="feat_docs" value="3"></td><td><input type="radio" name="feat_docs" value="4"></td><td><input type="radio" name="feat_docs" value="5"></td></tr>
+            <tr><td>Application status tracking</td><td><input type="radio" name="feat_tracking" value="1"></td><td><input type="radio" name="feat_tracking" value="2"></td><td><input type="radio" name="feat_tracking" value="3"></td><td><input type="radio" name="feat_tracking" value="4"></td><td><input type="radio" name="feat_tracking" value="5"></td></tr>
+            <tr><td>Automated SMS / email notifications</td><td><input type="radio" name="feat_notif" value="1"></td><td><input type="radio" name="feat_notif" value="2"></td><td><input type="radio" name="feat_notif" value="3"></td><td><input type="radio" name="feat_notif" value="4"></td><td><input type="radio" name="feat_notif" value="5"></td></tr>
+            <tr><td>Reporting & enrollment analytics</td><td><input type="radio" name="feat_reports" value="1"></td><td><input type="radio" name="feat_reports" value="2"></td><td><input type="radio" name="feat_reports" value="3"></td><td><input type="radio" name="feat_reports" value="4"></td><td><input type="radio" name="feat_reports" value="5"></td></tr>
+            <tr><td>Offline functionality</td><td><input type="radio" name="feat_offline" value="1"></td><td><input type="radio" name="feat_offline" value="2"></td><td><input type="radio" name="feat_offline" value="3"></td><td><input type="radio" name="feat_offline" value="4"></td><td><input type="radio" name="feat_offline" value="5"></td></tr>
+            <tr><td>Student ID generation</td><td><input type="radio" name="feat_id" value="1"></td><td><input type="radio" name="feat_id" value="2"></td><td><input type="radio" name="feat_id" value="3"></td><td><input type="radio" name="feat_id" value="4"></td><td><input type="radio" name="feat_id" value="5"></td></tr>
+            <tr><td>Integration with existing systems</td><td><input type="radio" name="feat_integration" value="1"></td><td><input type="radio" name="feat_integration" value="2"></td><td><input type="radio" name="feat_integration" value="3"></td><td><input type="radio" name="feat_integration" value="4"></td><td><input type="radio" name="feat_integration" value="5"></td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+
+      <div class="question">
+        <label>What additional features would be valuable for your institution?</label>
+        <textarea name="additional_features" placeholder="Please describe any features not listed above..."></textarea>
+      </div>
+
+      <div class="question">
+        <label>What is the biggest barrier to adopting a digital platform? <span class="required">*</span></label>
+        <div class="checkbox-group">
+          <label class="checkbox-option"><input type="checkbox" name="barriers" value="Cost / budget constraints"><span>Cost / budget constraints</span></label>
+          <label class="checkbox-option"><input type="checkbox" name="barriers" value="Internet reliability"><span>Internet reliability</span></label>
+          <label class="checkbox-option"><input type="checkbox" name="barriers" value="Staff technical skills"><span>Staff technical skills / training needs</span></label>
+          <label class="checkbox-option"><input type="checkbox" name="barriers" value="Resistance to change"><span>Institutional resistance to change</span></label>
+          <label class="checkbox-option"><input type="checkbox" name="barriers" value="Power supply issues"><span>Power supply issues</span></label>
+          <label class="checkbox-option"><input type="checkbox" name="barriers" value="Data security concerns"><span>Data security / privacy concerns</span></label>
+          <label class="checkbox-option"><input type="checkbox" name="barriers" value="No suitable platform available"><span>Haven't found a suitable platform</span></label>
+        </div>
+      </div>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn btn-back" onclick="showPage(3)">Back</button>
+      <button class="btn btn-next" onclick="showPage(5)">Next</button>
+    </div>
+  </div>
+
+  <!-- PAGE 5: Budget & Next Steps -->
+  <div class="page" id="page5">
+    <div class="section">
+      <div class="section-label">Section 5 of 5</div>
+      <div class="section-title">Budget & Engagement</div>
+
+      <div class="question">
+        <label>What is your institution's annual IT / technology budget range?</label>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="budget" value="Under $5,000"><span>Under $5,000 USD</span></label>
+          <label class="radio-option"><input type="radio" name="budget" value="$5,000-$15,000"><span>$5,000 – $15,000 USD</span></label>
+          <label class="radio-option"><input type="radio" name="budget" value="$15,000-$50,000"><span>$15,000 – $50,000 USD</span></label>
+          <label class="radio-option"><input type="radio" name="budget" value="$50,000-$100,000"><span>$50,000 – $100,000 USD</span></label>
+          <label class="radio-option"><input type="radio" name="budget" value="Over $100,000"><span>Over $100,000 USD</span></label>
+          <label class="radio-option"><input type="radio" name="budget" value="Prefer not to say"><span>Prefer not to say</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label>What pricing model would your institution prefer?</label>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="pricing_model" value="One-time license fee"><span>One-time license fee</span></label>
+          <label class="radio-option"><input type="radio" name="pricing_model" value="Annual subscription"><span>Annual subscription</span></label>
+          <label class="radio-option"><input type="radio" name="pricing_model" value="Per-student fee"><span>Per-student transaction fee</span></label>
+          <label class="radio-option"><input type="radio" name="pricing_model" value="Freemium"><span>Free basic tier with paid premium features</span></label>
+          <label class="radio-option"><input type="radio" name="pricing_model" value="Government funded"><span>Government or donor funded (no cost to institution)</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label>Who would be the decision-maker for adopting this platform?</label>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="decision_maker" value="University President"><span>University President / Chancellor</span></label>
+          <label class="radio-option"><input type="radio" name="decision_maker" value="Board of Trustees"><span>Board of Trustees / Governing Board</span></label>
+          <label class="radio-option"><input type="radio" name="decision_maker" value="VP Academic Affairs"><span>VP of Academic Affairs</span></label>
+          <label class="radio-option"><input type="radio" name="decision_maker" value="Registrar"><span>Registrar</span></label>
+          <label class="radio-option"><input type="radio" name="decision_maker" value="IT Director"><span>IT Director</span></label>
+          <label class="radio-option"><input type="radio" name="decision_maker" value="Other"><span>Other</span></label>
+        </div>
+        <input type="text" class="other-input" placeholder="Please specify..." data-for="decision_maker">
+      </div>
+
+      <div class="question">
+        <label>When would your institution realistically be ready to adopt a new platform?</label>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="timeline" value="Immediately"><span>Immediately — we need this now</span></label>
+          <label class="radio-option"><input type="radio" name="timeline" value="Within 6 months"><span>Within 6 months</span></label>
+          <label class="radio-option"><input type="radio" name="timeline" value="6-12 months"><span>6 – 12 months</span></label>
+          <label class="radio-option"><input type="radio" name="timeline" value="1-2 years"><span>1 – 2 years</span></label>
+          <label class="radio-option"><input type="radio" name="timeline" value="Not sure"><span>Not sure</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label>Would your institution be interested in a free pilot program?</label>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="pilot" value="Yes, very interested"><span>Yes, very interested</span></label>
+          <label class="radio-option"><input type="radio" name="pilot" value="Possibly"><span>Possibly — would need more details</span></label>
+          <label class="radio-option"><input type="radio" name="pilot" value="No"><span>No, not at this time</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <label>Any additional comments or specific needs?</label>
+        <textarea name="comments" placeholder="Share anything else that would help us understand your institution's needs..."></textarea>
+      </div>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn btn-back" onclick="showPage(4)">Back</button>
+      <button class="btn btn-submit" onclick="submitSurvey()">Submit Survey</button>
+    </div>
+  </div>
+
+  <!-- THANK YOU -->
+  <div class="page" id="thankYou">
+    <div class="thank-you">
+      <span class="check-icon">&#10003;</span>
+      <h2>Thank You!</h2>
+      <p>Your responses have been recorded. A member of the D3E Technology Solutions team will be in touch shortly.</p>
+      <p style="margin-top: 24px; font-size: 0.8rem; color: #8a9cc0;">For questions, contact us at info@d3etech.com</p>
+    </div>
+  </div>
+</div>
+
+<script>
+function showPage(n) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page' + n).classList.add('active');
+  document.getElementById('progressFill').style.width = (n * 20) + '%';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ============================================================
+// GOOGLE SHEETS INTEGRATION
+// Replace the URL below with your deployed Google Apps Script URL
+// See setup instructions: google-sheets-setup.md
+// ============================================================
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwiVrUoKhbRvh4Hda1p2DtL5JXx6BQCFtChUt5N3PO45OsGQ9ZiDMRPDELCLnqMv_h7/exec';
+
+function submitSurvey() {
+  // Collect all form data
+  const data = {};
+  document.querySelectorAll('input, select, textarea').forEach(el => {
+    if (el.type === 'radio') {
+      if (el.checked) data[el.name] = el.value;
+    } else if (el.type === 'checkbox') {
+      if (!data[el.name]) data[el.name] = [];
+      if (el.checked) data[el.name].push(el.value);
+    } else if (el.value) {
+      data[el.name] = el.value;
+    }
+  });
+
+  // Add timestamp
+  data.timestamp = new Date().toISOString();
+
+  // Show loading state on submit button
+  const submitBtn = document.querySelector('.btn-submit');
+  const originalText = submitBtn.textContent;
+  submitBtn.textContent = 'Submitting...';
+  submitBtn.disabled = true;
+
+  // Send to Google Sheets
+  if (GOOGLE_SCRIPT_URL !== 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
+    fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    }).then(() => {
+      showThankYou();
+    }).catch(err => {
+      console.error('Sheet submission error:', err);
+      // Fallback: download JSON locally
+      downloadJSON(data);
+      showThankYou();
+    });
+  } else {
+    // No script URL configured — download JSON as fallback
+    console.warn('Google Apps Script URL not configured. Downloading JSON instead.');
+    downloadJSON(data);
+    showThankYou();
+  }
+}
+
+function downloadJSON(data) {
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `survey-response-${data.institution || 'unknown'}-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+}
+
+function showThankYou() {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('thankYou').classList.add('active');
+  document.getElementById('progressFill').style.width = '100%';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Scale option visual selection
+document.querySelectorAll('.scale-option').forEach(opt => {
+  opt.addEventListener('click', function() {
+    this.closest('.scale-group').querySelectorAll('.scale-option').forEach(o => o.classList.remove('selected'));
+    this.classList.add('selected');
+  });
+});
+
+// Show "Other" text input when "Other" radio is selected
+document.querySelectorAll('input[type="radio"]').forEach(radio => {
+  radio.addEventListener('change', function() {
+    const otherInput = this.closest('.question').querySelector('.other-input');
+    if (otherInput) {
+      otherInput.classList.toggle('show', this.value === 'Other' || this.value === 'Yes');
+    }
+  });
+});
+</script>
+</body>
+</html>
