@@ -133,8 +133,7 @@ select option { background: #12162a; color: #e0e8f5; }
   <h1>Liberia Higher Education Digital Readiness Survey 2026</h1>
   <p>End-to-End Integrated Entrance Registration Platform — Assessing institutional needs, technology readiness, and interest among Liberian universities.</p>
   <div class="surveyor-script">
-    <div class="script-label">Surveyor Script</div>
-    <p>"Good day. My name is __________ and I am conducting this survey on behalf of D3E Technology Solutions. As of early 2026, the Liberian government and the African Union (AU-IPED) have officially launched the EMIS Modernization Roadmap, which mandates that all higher education institutions move toward a Unified Data System. We are gathering information to understand your institution's current registration processes, technology readiness, and interest in a digital entrance registration platform that aligns with this national initiative. Your responses will help shape a solution tailored to the needs of Liberian universities. This survey takes approximately 10–15 minutes. All responses are confidential."</p>
+    <p>As of early 2026, the Liberian government and the African Union (AU-IPED) have officially launched the EMIS Modernization Roadmap, which mandates that all higher education institutions move toward a Unified Data System. We are gathering information to understand your institution's current registration processes, technology readiness, and interest in a digital entrance registration platform that aligns with this national initiative. Your responses will help shape a solution tailored to the needs of Liberian universities. This survey takes approximately 10–15 minutes. All responses are confidential.</p>
   </div>
 </div>
 
@@ -178,11 +177,7 @@ select option { background: #12162a; color: #e0e8f5; }
         <div class="radio-group">
           <label class="radio-option"><input type="radio" name="inst_type" value="Public University" required><span>Public University</span></label>
           <label class="radio-option"><input type="radio" name="inst_type" value="Private University"><span>Private University</span></label>
-          <label class="radio-option"><input type="radio" name="inst_type" value="Community College"><span>Community College</span></label>
-          <label class="radio-option"><input type="radio" name="inst_type" value="Polytechnic"><span>Polytechnic / Technical Institute</span></label>
-          <label class="radio-option"><input type="radio" name="inst_type" value="Other"><span>Other</span></label>
         </div>
-        <input type="text" class="other-input" placeholder="Please specify..." data-for="inst_type">
       </div>
 
       <div class="question">
@@ -354,11 +349,11 @@ select option { background: #12162a; color: #e0e8f5; }
       <div class="question">
         <label>What is the primary power source at your institution?</label>
         <div class="radio-group">
-          <label class="radio-option"><input type="radio" name="power" value="Grid electricity (reliable)"><span>Grid electricity (reliable)</span></label>
-          <label class="radio-option"><input type="radio" name="power" value="Grid electricity (frequent outages)"><span>Grid electricity (frequent outages)</span></label>
+          <label class="radio-option"><input type="radio" name="power" value="LEC (reliable)"><span>LEC (reliable)</span></label>
+          <label class="radio-option"><input type="radio" name="power" value="LEC (frequent outages)"><span>LEC (frequent outages)</span></label>
           <label class="radio-option"><input type="radio" name="power" value="Generator primary"><span>Generator (primary source)</span></label>
           <label class="radio-option"><input type="radio" name="power" value="Solar"><span>Solar power</span></label>
-          <label class="radio-option"><input type="radio" name="power" value="Mixed"><span>Mixed (grid + generator backup)</span></label>
+          <label class="radio-option"><input type="radio" name="power" value="Mixed"><span>Mixed (LEC + generator backup)</span></label>
         </div>
       </div>
     </div>
@@ -453,7 +448,7 @@ select option { background: #12162a; color: #e0e8f5; }
       </div>
 
       <div class="question">
-        <label>What pricing model would your institution prefer?</label>
+        <label>If your institution had to pay for a software, what pricing model would be preferred?</label>
         <div class="radio-group">
           <label class="radio-option"><input type="radio" name="pricing_model" value="One-time license fee"><span>One-time license fee</span></label>
           <label class="radio-option"><input type="radio" name="pricing_model" value="Annual subscription"><span>Annual subscription</span></label>
@@ -518,28 +513,77 @@ select option { background: #12162a; color: #e0e8f5; }
     <div class="thank-you">
       <span class="check-icon">&#10003;</span>
       <h2>Thank You!</h2>
-      <p>Your responses have been recorded. A member of the D3E Technology Solutions team will be in touch shortly.</p>
-      <p style="margin-top: 24px; font-size: 0.8rem; color: #8a9cc0;">For questions, contact us at info@d3etech.com</p>
+      <p>Your responses have been recorded.</p>
+      <button class="btn btn-next" style="margin-top: 32px;" onclick="location.reload()">Start New Survey</button>
     </div>
   </div>
 </div>
 
 <script>
+function validatePage(page) {
+  const missing = [];
+  // Check required inputs, selects, textareas
+  page.querySelectorAll('input[required], select[required], textarea[required]').forEach(el => {
+    if (el.type === 'radio') {
+      const name = el.name;
+      if (!page.querySelector(`input[name="${name}"]:checked`)) {
+        const label = el.closest('.question').querySelector('label').textContent.replace('*', '').trim();
+        if (!missing.includes(label)) missing.push(label);
+      }
+    } else if (!el.value) {
+      const label = el.closest('.question').querySelector('label').textContent.replace('*', '').trim();
+      missing.push(label);
+    }
+  });
+  // Check checkbox groups marked as required (label contains *)
+  page.querySelectorAll('.checkbox-group').forEach(group => {
+    const question = group.closest('.question');
+    const label = question.querySelector('label');
+    if (label && label.querySelector('.required')) {
+      const name = group.querySelector('input[type="checkbox"]').name;
+      if (!group.querySelector('input:checked')) {
+        missing.push(label.textContent.replace('*', '').trim());
+      }
+    }
+  });
+  return missing;
+}
+
 function showPage(n) {
+  const currentPage = document.querySelector('.page.active');
+  const currentNum = parseInt(currentPage.id.replace('page', ''));
+
+  // Only validate when moving forward
+  if (n > currentNum) {
+    const missing = validatePage(currentPage);
+    if (missing.length > 0) {
+      alert('Please complete the following required fields:\n\n• ' + missing.join('\n• '));
+      return;
+    }
+  }
+
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page' + n).classList.add('active');
   document.getElementById('progressFill').style.width = (n * 20) + '%';
+  localStorage.setItem('surveyPage', n);
+  saveFormState();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// ============================================================
-// GOOGLE SHEETS INTEGRATION
-// Replace the URL below with your deployed Google Apps Script URL
-// See setup instructions: google-sheets-setup.md
-// ============================================================
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwiVrUoKhbRvh4Hda1p2DtL5JXx6BQCFtChUt5N3PO45OsGQ9ZiDMRPDELCLnqMv_h7/exec';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxJIzwJg5fuuE5MucZAjtcYD4npheVk03wn917enhjna9S-hzRcjV_y2j_GxvBAxaii/exec';
 
 function submitSurvey() {
+  const currentPage = document.querySelector('.page.active');
+  const missing = validatePage(currentPage);
+  if (missing.length > 0) {
+    alert('Please complete the following required fields:\n\n• ' + missing.join('\n• '));
+    return;
+  }
+
+  const submitBtn = document.querySelector('.btn-submit');
+  submitBtn.textContent = 'Submitting...';
+  submitBtn.disabled = true;
+
   // Collect all form data
   const data = {};
   document.querySelectorAll('input, select, textarea').forEach(el => {
@@ -556,19 +600,17 @@ function submitSurvey() {
   // Add timestamp
   data.timestamp = new Date().toISOString();
 
-  // Show loading state on submit button
-  const submitBtn = document.querySelector('.btn-submit');
-  const originalText = submitBtn.textContent;
-  submitBtn.textContent = 'Submitting...';
-  submitBtn.disabled = true;
-
   // Send to Google Sheets
   if (GOOGLE_SCRIPT_URL !== 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
+    const params = new URLSearchParams();
+    for (const [key, value] of Object.entries(data)) {
+      params.append(key, Array.isArray(value) ? value.join(', ') : value);
+    }
     fetch(GOOGLE_SCRIPT_URL, {
       method: 'POST',
       mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: params.toString()
     }).then(() => {
       showThankYou();
     }).catch(err => {
@@ -595,6 +637,8 @@ function downloadJSON(data) {
 }
 
 function showThankYou() {
+  localStorage.removeItem('surveyData');
+  localStorage.removeItem('surveyPage');
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('thankYou').classList.add('active');
   document.getElementById('progressFill').style.width = '100%';
@@ -618,6 +662,74 @@ document.querySelectorAll('input[type="radio"]').forEach(radio => {
     }
   });
 });
+
+// --- localStorage persistence ---
+function saveFormState() {
+  const data = {};
+  document.querySelectorAll('input, select, textarea').forEach(el => {
+    if (el.type === 'radio') {
+      if (el.checked) data[el.name] = el.value;
+    } else if (el.type === 'checkbox') {
+      if (!data[el.name]) data[el.name] = [];
+      if (el.checked) data[el.name].push(el.value);
+    } else if (el.name && el.value) {
+      data[el.name] = el.value;
+    }
+  });
+  localStorage.setItem('surveyData', JSON.stringify(data));
+}
+
+function restoreFormState() {
+  const saved = localStorage.getItem('surveyData');
+  if (!saved) return;
+  const data = JSON.parse(saved);
+  for (const [key, value] of Object.entries(data)) {
+    if (Array.isArray(value)) {
+      value.forEach(v => {
+        const cb = document.querySelector(`input[type="checkbox"][name="${key}"][value="${CSS.escape(v)}"]`);
+        if (cb) cb.checked = true;
+      });
+    } else {
+      const radios = document.querySelectorAll(`input[type="radio"][name="${key}"]`);
+      if (radios.length > 0) {
+        radios.forEach(r => {
+          if (r.value === value) {
+            r.checked = true;
+            // Update scale option visual
+            const scaleOpt = r.closest('.scale-option');
+            if (scaleOpt) {
+              scaleOpt.closest('.scale-group').querySelectorAll('.scale-option').forEach(o => o.classList.remove('selected'));
+              scaleOpt.classList.add('selected');
+            }
+            // Show "Other" input if needed
+            const otherInput = r.closest('.question')?.querySelector('.other-input');
+            if (otherInput) otherInput.classList.toggle('show', value === 'Other' || value === 'Yes');
+          }
+        });
+      } else {
+        const el = document.querySelector(`[name="${key}"]`);
+        if (el) el.value = value;
+      }
+    }
+  }
+}
+
+// Auto-save on any input change
+document.querySelectorAll('input, select, textarea').forEach(el => {
+  el.addEventListener('change', saveFormState);
+  if (el.type === 'text' || el.type === 'email' || el.type === 'tel' || el.type === 'number' || el.tagName === 'TEXTAREA') {
+    el.addEventListener('input', saveFormState);
+  }
+});
+
+// Restore form state and page on load
+restoreFormState();
+const savedPage = localStorage.getItem('surveyPage');
+if (savedPage) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page' + savedPage).classList.add('active');
+  document.getElementById('progressFill').style.width = (savedPage * 20) + '%';
+}
 </script>
 </body>
 </html>
