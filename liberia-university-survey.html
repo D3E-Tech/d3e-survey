@@ -255,7 +255,9 @@ select option { background: #12162a; color: #e0e8f5; }
           <label class="checkbox-option"><input type="checkbox" name="pain_points" value="Communication with applicants"><span>Poor communication with applicants</span></label>
           <label class="checkbox-option"><input type="checkbox" name="pain_points" value="Entrance exam management"><span>Entrance exam scheduling and management</span></label>
           <label class="checkbox-option"><input type="checkbox" name="pain_points" value="Credential verification"><span>Credential / transcript verification</span></label>
+          <label class="checkbox-option"><input type="checkbox" name="pain_points" value="Other" class="cb-other-trigger"><span>Other</span></label>
         </div>
+        <input type="text" class="other-input" name="pain_points_other" placeholder="Please specify...">
       </div>
 
       <div class="question">
@@ -309,7 +311,9 @@ select option { background: #12162a; color: #e0e8f5; }
           <label class="checkbox-option"><input type="checkbox" name="devices" value="Tablets"><span>Tablets</span></label>
           <label class="checkbox-option"><input type="checkbox" name="devices" value="Smartphones"><span>Smartphones</span></label>
           <label class="checkbox-option"><input type="checkbox" name="devices" value="Shared computers"><span>Shared / lab computers only</span></label>
+          <label class="checkbox-option"><input type="checkbox" name="devices" value="Other" class="cb-other-trigger"><span>Other</span></label>
         </div>
+        <input type="text" class="other-input" name="devices_other" placeholder="Please specify...">
       </div>
 
       <div class="question">
@@ -354,7 +358,9 @@ select option { background: #12162a; color: #e0e8f5; }
           <label class="radio-option"><input type="radio" name="power" value="Generator primary"><span>Generator (primary source)</span></label>
           <label class="radio-option"><input type="radio" name="power" value="Solar"><span>Solar power</span></label>
           <label class="radio-option"><input type="radio" name="power" value="Mixed"><span>Mixed (LEC + generator backup)</span></label>
+          <label class="radio-option"><input type="radio" name="power" value="Other"><span>Other</span></label>
         </div>
+        <input type="text" class="other-input" name="power_other" placeholder="Please specify..." data-for="power">
       </div>
     </div>
     <div class="nav-buttons">
@@ -420,7 +426,9 @@ select option { background: #12162a; color: #e0e8f5; }
           <label class="checkbox-option"><input type="checkbox" name="barriers" value="Power supply issues"><span>Power supply issues</span></label>
           <label class="checkbox-option"><input type="checkbox" name="barriers" value="Data security concerns"><span>Data security / privacy concerns</span></label>
           <label class="checkbox-option"><input type="checkbox" name="barriers" value="No suitable platform available"><span>Haven't found a suitable platform</span></label>
+          <label class="checkbox-option"><input type="checkbox" name="barriers" value="Other" class="cb-other-trigger"><span>Other</span></label>
         </div>
+        <input type="text" class="other-input" name="barriers_other" placeholder="Please specify...">
       </div>
     </div>
     <div class="nav-buttons">
@@ -455,7 +463,9 @@ select option { background: #12162a; color: #e0e8f5; }
           <label class="radio-option"><input type="radio" name="pricing_model" value="Per-student fee"><span>Per-student transaction fee</span></label>
           <label class="radio-option"><input type="radio" name="pricing_model" value="Freemium"><span>Free basic tier with paid premium features</span></label>
           <label class="radio-option"><input type="radio" name="pricing_model" value="Government funded"><span>Government or donor funded (no cost to institution)</span></label>
+          <label class="radio-option"><input type="radio" name="pricing_model" value="Other"><span>Other</span></label>
         </div>
+        <input type="text" class="other-input" name="pricing_model_other" placeholder="Please specify..." data-for="pricing_model">
       </div>
 
       <div class="question">
@@ -488,7 +498,9 @@ select option { background: #12162a; color: #e0e8f5; }
           <label class="radio-option"><input type="radio" name="pilot" value="Yes, very interested"><span>Yes, very interested</span></label>
           <label class="radio-option"><input type="radio" name="pilot" value="Possibly"><span>Possibly — would need more details</span></label>
           <label class="radio-option"><input type="radio" name="pilot" value="No"><span>No, not at this time</span></label>
+          <label class="radio-option"><input type="radio" name="pilot" value="Other"><span>Other</span></label>
         </div>
+        <input type="text" class="other-input" name="pilot_other" placeholder="Please specify..." data-for="pilot">
       </div>
 
       <div class="question">
@@ -597,6 +609,22 @@ function submitSurvey() {
     }
   });
 
+  // Merge "Other" specify fields into their parent field
+  ['pain_points', 'devices', 'barriers'].forEach(key => {
+    if (Array.isArray(data[key]) && data[key].includes('Other')) {
+      const specify = data[key + '_other'];
+      if (specify) data[key] = data[key].map(v => v === 'Other' ? 'Other - ' + specify : v);
+      delete data[key + '_other'];
+    }
+  });
+  ['power', 'pricing_model', 'pilot'].forEach(key => {
+    if (data[key] === 'Other') {
+      const specify = data[key + '_other'];
+      if (specify) data[key] = 'Other - ' + specify;
+      delete data[key + '_other'];
+    }
+  });
+
   // Add timestamp
   data.timestamp = new Date().toISOString();
 
@@ -660,6 +688,14 @@ document.querySelectorAll('input[type="radio"]').forEach(radio => {
     if (otherInput) {
       otherInput.classList.toggle('show', this.value === 'Other' || this.value === 'Yes');
     }
+  });
+});
+
+// Show "Other" text input when "Other" checkbox is checked
+document.querySelectorAll('input.cb-other-trigger').forEach(cb => {
+  cb.addEventListener('change', function() {
+    const otherInput = this.closest('.question').querySelector('.other-input');
+    if (otherInput) otherInput.classList.toggle('show', this.checked);
   });
 });
 
